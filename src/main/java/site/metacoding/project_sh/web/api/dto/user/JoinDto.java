@@ -20,6 +20,7 @@ public class JoinDto {
         user.setNickname(this.nickname);
         user.setPassword(this.password);
         user.setEmail(this.email);
+        user.setCoin(0);
         return user;
     }
 

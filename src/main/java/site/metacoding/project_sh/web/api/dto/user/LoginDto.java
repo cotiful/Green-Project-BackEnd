@@ -15,5 +15,4 @@ public class LoginDto {
 
     @Transient
     private String remember;
-
 }
