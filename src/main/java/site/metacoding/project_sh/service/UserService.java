@@ -1,5 +1,8 @@
 package site.metacoding.project_sh.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +22,9 @@ public class UserService {
         User userEntity = userRepository.mUsernameSameCheck(username);
 
         if (userEntity == null) {
-            return "아이디 중복이 없습니다.";
+            return "노중복";
         } else {
-            return "아이디가 중복됩니다.";
+            return "중복";
         }
     }
 
@@ -29,9 +32,9 @@ public class UserService {
         User userEntity = userRepository.mNicknameSameCheck(nickname);
 
         if (userEntity == null) {
-            return "닉네임 중복이 없습니다.";
+            return "닉네임노중복";
         } else {
-            return "닉네임이 중복됩니다.";
+            return "닉네임중복";
         }
     }
 
@@ -45,4 +48,19 @@ public class UserService {
         System.out.println("로그인:" + userEntity);
         return userEntity;
     }
+
+    public User 유저수정(Integer id, User user) {
+        Optional<User> userOp = userRepository.findById(id);
+
+        if (userOp.isPresent()) {
+            User userEntity = userOp.get();
+            userEntity.setNickname(user.getNickname());
+            userEntity.setPassword(user.getPassword());
+            userEntity.setEmail(user.getEmail());
+
+            return userEntity;
+        }
+        return null;
+    }
+
 }
