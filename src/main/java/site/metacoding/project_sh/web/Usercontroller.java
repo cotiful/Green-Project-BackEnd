@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.internal.util.beans.BeanInfoHelper.ReturningBeanInfoDelegate;
+import org.hibernate.sql.Update;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import site.metacoding.project_sh.service.UserService;
 import site.metacoding.project_sh.web.api.dto.ResponseDto;
 import site.metacoding.project_sh.web.api.dto.user.JoinDto;
 import site.metacoding.project_sh.web.api.dto.user.LoginDto;
+import site.metacoding.project_sh.web.api.dto.user.UpdateDto;
 
 @RequiredArgsConstructor
 @Controller
@@ -97,29 +99,45 @@ public class Usercontroller {
 
     // 로그인 데이터 전송
     @PostMapping("/login")
-    public @ResponseBody ResponseDto<?> login(LoginDto loginDto, HttpServletResponse response) {
+    public String login(LoginDto loginDto, HttpServletResponse response) {
         User userEntity = userService.로그인(loginDto);
-        if (userEntity == null) {
-            return new ResponseDto<>(-1, "로그인실패", null);
-        }
-        if (loginDto.getRemember() != null) {
-            if (loginDto.getRemember().equals("on")) {
-                response.addHeader("Set-Cookie", "remember=" + loginDto.getUsername() + "; path=/" + ";HttpOnly=true");
+        if (userEntity != null) {
+            session.setAttribute("principal", userEntity);
+            if (loginDto.getRemember() != null && loginDto.getRemember().equals("on")) {
+                response.addHeader("Set-Cookie", "remember=" + loginDto.getUsername());
             }
+            return "redirect:/main";
+        } else {
+            return "redirect:/loginForm";
         }
-        session.setAttribute("principal", userEntity);
-        return new ResponseDto<String>(1, "로그인성공", null);
     }
 
     // 메인페이지
     @GetMapping("/main")
-    public String main() {
-        return "main";
+    public String mainForm(Model model) {
+        model.addAttribute("main", true);
+        return "user/mainForm";
+    }
+
+    @PutMapping("/main/{id}")
+    public @ResponseBody ResponseDto<?> coinUpdate(@PathVariable Integer id, @RequestBody UpdateDto updateDto) {
+
+        User principal = (User) session.getAttribute("principal");
+
+        if (principal.getId() != id) {
+            throw new RuntimeException("동기화되지 않았다..");
+        }
+
+        User userCoin = userService.코인업데이트(id, updateDto);
+        session.setAttribute("principal", userCoin);
+        System.out.println("코인업데이트 잘됐나 확인*************" + userCoin);
+        return new ResponseDto<>(1, "수정완료", null);
     }
 
     // 준비 페이지
     @GetMapping("/s/ready")
-    public String ready() {
+    public String ready(Model model) {
+        model.addAttribute("ready", true);
         return "ready";
     }
 

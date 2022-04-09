@@ -42,9 +42,9 @@ public class User {
 
     private Integer coin;
 
-    @Column(nullable = false)
-    @CreatedDate
-    private LocalDateTime createDate;
+    // @Column(nullable = false)
+    // @CreatedDate
+    // private LocalDateTime createDate;
 
     @LastModifiedDate
     private LocalDateTime updateDate;

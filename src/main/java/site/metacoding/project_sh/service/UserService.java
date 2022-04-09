@@ -11,12 +11,25 @@ import site.metacoding.project_sh.domain.user.User;
 import site.metacoding.project_sh.domain.user.UserRepository;
 import site.metacoding.project_sh.web.api.dto.user.JoinDto;
 import site.metacoding.project_sh.web.api.dto.user.LoginDto;
+import site.metacoding.project_sh.web.api.dto.user.UpdateDto;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+
+    @Transactional
+    public User 코인업데이트(Integer id, UpdateDto updateDto) {
+        Optional<User> userCoinOp = userRepository.findById(id);
+        if (userCoinOp.isPresent()) {
+            User userEntity = userCoinOp.get();
+            userEntity.setCoin(updateDto.getCoin());
+
+            return userEntity;
+        }
+        return null;
+    }
 
     public String 유저네임중복검사(String username) {
         User userEntity = userRepository.mUsernameSameCheck(username);
