@@ -10,7 +10,7 @@ import site.metacoding.project_sh.domain.user.User;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UpdateDto {
+public class CoinUpdateDto {
     private Integer coin;
 
     public User toEntity() {

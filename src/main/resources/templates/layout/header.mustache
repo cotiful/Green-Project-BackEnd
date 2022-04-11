@@ -15,8 +15,10 @@
 <body>
     <div class="box-bg">
         <!-- 헤더 시작 -->
+        
         <div class="p-4 bg-primary box-header d-flex justify-content-between">
             {{#principal}}
+            <input type="hidden" id="id" value="{{principal.id}}">
             <div class="d-flex box-header-left">
                 <div class="d-flex justify-content-center box-header-name header-font">
                     <p id="username">{{principal.username}}</p>
@@ -55,6 +57,7 @@
              let coinUpdateDto = {
                  coin:$("coin").val()
              }
+             console.log(coinUpdate);
              let response = await fetch(`/main/${id}`,{
                  method:"PUT",
                  body:JSON.stringify(coinUpdateDto),
@@ -62,8 +65,9 @@
                     "Content-Type":"application/json; charset=utf-8"
                  }
              });
+             
              let responseParse = await response.json();
-             console.log(responseParse);
              
          }
+         coinUpdate();
      </script>

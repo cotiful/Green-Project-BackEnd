@@ -11,7 +11,7 @@ import site.metacoding.project_sh.domain.user.User;
 import site.metacoding.project_sh.domain.user.UserRepository;
 import site.metacoding.project_sh.web.api.dto.user.JoinDto;
 import site.metacoding.project_sh.web.api.dto.user.LoginDto;
-import site.metacoding.project_sh.web.api.dto.user.UpdateDto;
+import site.metacoding.project_sh.web.api.dto.user.CoinUpdateDto;
 
 @RequiredArgsConstructor
 @Service
@@ -20,12 +20,11 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User 코인업데이트(Integer id, UpdateDto updateDto) {
+    public User 코인업데이트(Integer id, CoinUpdateDto coinUpdateDto) {
         Optional<User> userCoinOp = userRepository.findById(id);
         if (userCoinOp.isPresent()) {
             User userEntity = userCoinOp.get();
-            userEntity.setCoin(updateDto.getCoin());
-
+            userEntity.setCoin(coinUpdateDto.getCoin());
             return userEntity;
         }
         return null;

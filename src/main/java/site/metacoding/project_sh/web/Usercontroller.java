@@ -21,9 +21,9 @@ import lombok.RequiredArgsConstructor;
 import site.metacoding.project_sh.domain.user.User;
 import site.metacoding.project_sh.service.UserService;
 import site.metacoding.project_sh.web.api.dto.ResponseDto;
+import site.metacoding.project_sh.web.api.dto.user.CoinUpdateDto;
 import site.metacoding.project_sh.web.api.dto.user.JoinDto;
 import site.metacoding.project_sh.web.api.dto.user.LoginDto;
-import site.metacoding.project_sh.web.api.dto.user.UpdateDto;
 
 @RequiredArgsConstructor
 @Controller
@@ -120,15 +120,15 @@ public class Usercontroller {
     }
 
     @PutMapping("/main/{id}")
-    public @ResponseBody ResponseDto<?> coinUpdate(@PathVariable Integer id, @RequestBody UpdateDto updateDto) {
+    public @ResponseBody ResponseDto<?> coinUpdate(@PathVariable Integer id,
+            @RequestBody CoinUpdateDto coinupdateDto) {
 
         User principal = (User) session.getAttribute("principal");
 
         if (principal.getId() != id) {
             throw new RuntimeException("동기화되지 않았다..");
         }
-
-        User userCoin = userService.코인업데이트(id, updateDto);
+        User userCoin = userService.코인업데이트(id, coinupdateDto);
         session.setAttribute("principal", userCoin);
         System.out.println("코인업데이트 잘됐나 확인*************" + userCoin);
         return new ResponseDto<>(1, "수정완료", null);
